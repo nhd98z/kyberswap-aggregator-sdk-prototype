@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "kyberswap-aggregator-sdk": "^0.1.2",
     "next": "12.0.7",
     "react": "17.0.2",
     "react-dom": "17.0.2"
@@ -17,6 +18,7 @@
     "@types/react": "17.0.38",
     "eslint": "8.5.0",
     "eslint-config-next": "12.0.7",
+    "prettier": "^2.5.1",
     "typescript": "4.5.4"
   }
 }
