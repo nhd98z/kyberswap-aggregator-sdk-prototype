@@ -52,12 +52,14 @@ const Home: NextPage = () => {
         recipient: recipient,
         deadline: Date.now() + deadline * 60 * 1000,
       },
-      feeConfig: {
-        chargeFeeBy,
-        feeReceiver,
-        feeAmount,
-        isInBps,
-      },
+      feeConfig: isChargeFee
+        ? {
+            chargeFeeBy,
+            feeReceiver,
+            feeAmount,
+            isInBps,
+          }
+        : undefined,
     })
     if (data.outputAmount) {
       const fraction = new Fraction(data.outputAmount, (10 ** decimalOut).toString())
