@@ -23,7 +23,7 @@ const Home: NextPage = () => {
   const [deadline, setDeadline] = useState(20) // minutes
 
   const [isChargeFee, setIsChargeFee] = useState(true)
-  const [chargeFeeBy, setChargeFeeBy] = useState<'tokenIn' | 'tokenOut'>('tokenIn')
+  const [chargeFeeBy, setChargeFeeBy] = useState<'currency_in' | 'currency_out'>('currency_in')
   const [feeReceiver, setFeeReceiver] = useState('0x16368dD7e94f177B8C2c028Ef42289113D328121')
   const [feeAmount, setFeeAmount] = useState('1000') // 1000 bps = 1000 * 0.01% = 10%
   const [isInBps, setIsInBps] = useState(true)
@@ -79,12 +79,12 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Kyberswap SDK for Dextools</title>
-        <meta name="description" content="KyberSwap SDK for Dextools" />
+        <title>KyberSwap Aggregator SDK</title>
+        <meta name="description" content="KyberSwap Aggregator SDK" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>KyberSwap SDK for Dextools</h1>
+      <h1>KyberSwap Aggregator SDK</h1>
       <div style={{ display: 'flex', background: 'whitesmoke' }}>
         <div style={{ width: '50%', background: 'lightcyan' }}>
           <section>
@@ -183,14 +183,14 @@ const Home: NextPage = () => {
                     <span style={{ display: 'inline-block', width: '200px' }}>Charge fee by:</span>
                     <input
                       type="radio"
-                      checked={chargeFeeBy === 'tokenIn'}
-                      onChange={() => setChargeFeeBy('tokenIn')}
+                      checked={chargeFeeBy === 'currency_in'}
+                      onChange={() => setChargeFeeBy('currency_in')}
                     />{' '}
                     Token in
                     <input
                       type="radio"
-                      checked={chargeFeeBy === 'tokenOut'}
-                      onChange={() => setChargeFeeBy('tokenOut')}
+                      checked={chargeFeeBy === 'currency_out'}
+                      onChange={() => setChargeFeeBy('currency_out')}
                     />{' '}
                     Token out
                   </li>
@@ -211,6 +211,7 @@ const Home: NextPage = () => {
                       value={feeAmount}
                       onChange={(e) => setFeeAmount(e.currentTarget.value)}
                     />
+                    {isInBps ? 'bps' : chargeFeeBy === 'currency_in' ? 'currency in' : 'currency out'}
                   </li>
                   <li>
                     <span style={{ display: 'inline-block', width: '200px' }}>Fee amount in bps?</span>
