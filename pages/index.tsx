@@ -1,10 +1,11 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useState } from 'react'
-import { ChainId, CurrencyAmount, Fraction, Percent, Token, TokenAmount } from '@dynamic-amm/sdk'
+import { ChainId, Currency, CurrencyAmount, Fraction, Percent, Token, TokenAmount } from '@dynamic-amm/sdk'
 import { getData } from 'kyberswap-aggregator-sdk'
 import { ethers } from 'ethers'
 import { SwapV2Parameters } from 'kyberswap-aggregator-sdk/dist/types'
+import BigNumber from 'bignumber.js'
 
 const Home: NextPage = () => {
   const [network, setNetwork] = useState(ChainId.BSCMAINNET)
@@ -42,9 +43,9 @@ const Home: NextPage = () => {
           ? CurrencyAmount.ether(ethers.utils.parseEther(amountIn).toString())
           : new TokenAmount(
               new Token(network, currencyIn, decimalIn),
-              ethers.BigNumber.from(amountIn).mul(ethers.BigNumber.from(10).pow(decimalIn)).toString()
+              new BigNumber(amountIn).times(10 ** decimalIn).toString()
             ),
-      currencyOut: new Token(network, currencyOut, decimalOut),
+      currencyOut: currencyOut === 'ETH' ? Currency.ETHER : new Token(network, currencyOut, decimalOut),
       saveGas: saveGas,
       chainId: network,
       options: {
