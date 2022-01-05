@@ -70,7 +70,6 @@ const Home: NextPage = () => {
         })
       )
     }
-    return () => {}
   }, [args])
 
   const onSubmit = async () => {
@@ -140,9 +139,9 @@ const Home: NextPage = () => {
               value={network}
               onChange={(e) => setNetwork(+e.currentTarget.value as any)}
             >
-              <option value={ChainId.MAINNET}>Ethereum</option>
+              {/*<option value={ChainId.MAINNET}>Ethereum</option>*/}
               <option value={ChainId.BSCMAINNET}>Binance Smart Chain</option>
-              <option value={ChainId.MATIC}>Polygon</option>
+              {/*<option value={ChainId.MATIC}>Polygon</option>*/}
             </select>
           </section>
           <br />
@@ -326,6 +325,12 @@ const Home: NextPage = () => {
             <button onClick={() => copy(JSON.stringify(args))} className="copy">
               copy
             </button>
+            <span style={{ marginLeft: '4px' }}>
+              use this in{' '}
+              <a href="https://dev-dmm-interface-pr-774.knstats.com/#/swap" target="_blank" rel="noreferrer">
+                dev-dmm-interface-pr-774.knstats.com
+              </a>
+            </span>
             <pre>{JSON.stringify(args, null, 2)}</pre>
           </section>
           <br />
