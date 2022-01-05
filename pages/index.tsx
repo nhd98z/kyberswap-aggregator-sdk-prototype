@@ -191,7 +191,7 @@ const Home: NextPage = () => {
                 <span style={{ display: 'inline-block', width: '200px' }}>Allowed slippage:</span>
                 <input
                   type="number"
-                  style={{ margin: '0 4px', width: '30px' }}
+                  style={{ margin: '0 4px', width: '40px' }}
                   value={allowedSlippage}
                   onChange={(e) => setAllowedSlippage(+e.currentTarget.value)}
                 />
@@ -261,13 +261,14 @@ const Home: NextPage = () => {
                       value={feeAmount}
                       onChange={(e) => setFeeAmount(e.currentTarget.value)}
                     />
-                    {isInBps ? 'bps' : chargeFeeBy === 'currency_in' ? 'currency in' : 'currency out'}
+                    {/*{isInBps ? 'bps' : chargeFeeBy === 'currency_in' ? 'currency in' : 'currency out'}*/}
+                    bps (1000 bps = 1000 * 0.01% = 10%)
                   </li>
-                  <li>
-                    <span style={{ display: 'inline-block', width: '200px' }}>Fee amount in bps?</span>
-                    <input type="radio" checked={isInBps} onChange={() => setIsInBps(true)} /> True
-                    <input type="radio" checked={!isInBps} onChange={() => setIsInBps(false)} /> False
-                  </li>
+                  {/*<li>*/}
+                  {/*  <span style={{ display: 'inline-block', width: '200px' }}>Fee amount in bps?</span>*/}
+                  {/*  <input type="radio" checked={isInBps} onChange={() => setIsInBps(true)} /> True*/}
+                  {/*  <input type="radio" checked={!isInBps} onChange={() => setIsInBps(false)} /> False*/}
+                  {/*</li>*/}
                 </>
               )}
             </ul>
@@ -313,6 +314,10 @@ const Home: NextPage = () => {
           <section>
             <span>Output amount:&nbsp;</span>
             {outputAmount}
+            {outputAmount &&
+              isChargeFee &&
+              chargeFeeBy === 'currency_out' &&
+              ' (after fee: ' + new BigNumber(outputAmount).times(1 - +feeAmount / 10000) + ')'}
           </section>
           <br />
           <section>
