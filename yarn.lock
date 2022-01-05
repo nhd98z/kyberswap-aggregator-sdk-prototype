@@ -596,6 +596,11 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.0.tgz#7f698254aadf921e48dda8c0a6b304026b8a9323"
   integrity sha512-JLo+Y592QzIE+q7Dl2pMUtt4q8SKYI5jDrZxrozEQxnGVOyYE+GWK9eLkwTaeN9DDctlaRAQ3TBmzZ1qdLE30A==
 
+"@types/autosize@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/autosize/-/autosize-4.0.1.tgz#999a7c305b96766248044ebaac1a0299961f3b61"
+  integrity sha512-iPJT/FCaSO79G6j+9n6gmFc5nhxZ1gDrA2UAvb5FslJ6FJQZnDfbBU0qp5vpp0Cbjj7+gOyjuWZ7RrXvRuETaA==
+
 "@types/json5@^0.0.29":
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
@@ -807,6 +812,11 @@ ast-types-flow@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/ast-types-flow/-/ast-types-flow-0.0.7.tgz#f70b735c6bca1a5c9c22d982c3e39e7feba3bdad"
   integrity sha1-9wtzXGvKGlycItmCw+Oef+ujva0=
+
+autosize@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/autosize/-/autosize-5.0.1.tgz#ed269b0fa9b7eb47627048a1bb3299e99e003a0f"
+  integrity sha512-UIWUlE4TOVPNNj2jjrU39wI4hEYbneUypEqcyRmRFIx5CC2gNdg3rQr+Zh7/3h6egbBvm33TDQjNQKtj9Tk1HA==
 
 available-typed-arrays@^1.0.5:
   version "1.0.5"
@@ -2203,10 +2213,10 @@ json5@^1.0.1:
     array-includes "^3.1.3"
     object.assign "^4.1.2"
 
-kyberswap-aggregator-sdk@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/kyberswap-aggregator-sdk/-/kyberswap-aggregator-sdk-0.1.3.tgz#3e2e776c71413704a40b530f645d42710714e9cb"
-  integrity sha512-GhivAguhDmKZBudD/wGBCjs+JevMsu0o4CuCZYK0QJEBMGl22RvBzCLG60r8VWbV9erKmrIMHAyAiuOInk4ZJw==
+kyberswap-aggregator-sdk@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/kyberswap-aggregator-sdk/-/kyberswap-aggregator-sdk-0.1.4.tgz#93cd13cd5636e2a2e0421c2959b90c889050595a"
+  integrity sha512-vS+RYN2OGVRhO5gs10rkSP0o4m0K+72zpGTRjROpi5HpBN18g8R3ycI9VWCtR8UGxLuhT7ezLdKcg1BcOaMNVQ==
   dependencies:
     "@dynamic-amm/sdk" "^3.0.23"
     "@ethersproject/address" "^5.5.0"

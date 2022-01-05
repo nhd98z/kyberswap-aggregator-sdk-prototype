@@ -1,13 +1,34 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChainId, Currency, CurrencyAmount, Fraction, Percent, Token, TokenAmount } from '@dynamic-amm/sdk'
 import { getData } from 'kyberswap-aggregator-sdk'
 import { ethers } from 'ethers'
-import { SwapV2Parameters } from 'kyberswap-aggregator-sdk/dist/types'
 import BigNumber from 'bignumber.js'
+import autosize from 'autosize'
+
+const DEFAULT_CUSTOM_TRADE_ROUTE = `[
+  [
+    {
+      "pool": "0xe84ec9cde7f8e45c68668437634c1c0b2de3296c",
+      "tokenIn": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+      "tokenOut": "0xfe56d5892bdffc7bf58f2e84be1b2c32d21c308b",
+      "swapAmount": "1000000000000",
+      "amountOut": "0",
+      "limitReturnAmount": "0",
+      "maxPrice": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+      "exchange": "kyberswap",
+      "poolLength": 2,
+      "poolType": "dmm"
+    }
+  ]
+]`
 
 const Home: NextPage = () => {
+  useEffect(() => {
+    autosize(document.querySelectorAll('textarea'))
+  }, [])
+
   const [network, setNetwork] = useState(ChainId.BSCMAINNET)
 
   const [amountIn, setAmountIn] = useState('0.000001')
@@ -28,13 +49,16 @@ const Home: NextPage = () => {
   const [feeAmount, setFeeAmount] = useState('1000') // 1000 bps = 1000 * 0.01% = 10%
   const [isInBps, setIsInBps] = useState(true)
 
+  const [isUseCustomTradeRoute, setIsUseCustomTradeRoute] = useState(true)
+  const [customTradeRoute, setCustomTradeRoute] = useState(DEFAULT_CUSTOM_TRADE_ROUTE)
+
   const [outputAmount, setOutputAmount] = useState<string>()
   const [methodName, setMethodName] = useState<string>()
   const [ethValue, setEthValue] = useState<string>()
   const [args, setArgs] = useState<Array<string | Array<string | string[]>> | undefined>()
   const [rawExecutorData, setRawExecutorData] = useState<unknown>()
   const [isUseSwapSimpleMode, setIsUseSwapSimpleMode] = useState<boolean>()
-  const [tradeSwaps, setTradeSwaps] = useState<any[][]>()
+  const [tradeRoute, setTradeRoute] = useState<any[][]>()
 
   const onSubmit = async () => {
     const data = await getData({
@@ -61,6 +85,7 @@ const Home: NextPage = () => {
             isInBps,
           }
         : undefined,
+      customTradeRoute: isUseCustomTradeRoute ? customTradeRoute : undefined,
     })
     if (data.outputAmount) {
       const fraction = new Fraction(data.outputAmount, (10 ** decimalOut).toString())
@@ -73,7 +98,7 @@ const Home: NextPage = () => {
     }
     if (data.rawExecutorData) setRawExecutorData(data.rawExecutorData)
     if (data.isUseSwapSimpleMode) setIsUseSwapSimpleMode(data.isUseSwapSimpleMode)
-    if (data.tradeSwaps) setTradeSwaps(data.tradeSwaps)
+    if (data.tradeRoute) setTradeRoute(data.tradeRoute)
   }
 
   return (
@@ -223,6 +248,39 @@ const Home: NextPage = () => {
             </ul>
           </section>
           <br />
+          <section>
+            <div>Trade route:</div>
+            <ul>
+              <li>
+                <span style={{ display: 'inline-block', width: '200px' }}>Use custom trade route?</span>
+                <input
+                  type="radio"
+                  checked={isUseCustomTradeRoute}
+                  onChange={() => setIsUseCustomTradeRoute(true)}
+                />{' '}
+                True
+                <input
+                  type="radio"
+                  checked={!isUseCustomTradeRoute}
+                  onChange={() => setIsUseCustomTradeRoute(false)}
+                />{' '}
+                False
+              </li>
+              {isUseCustomTradeRoute && (
+                <li>
+                  <div style={{ width: '200px' }}>Custom trade route:</div>
+                  <textarea
+                    style={{
+                      width: 'calc(100% - 32px)',
+                      minHeight: '16px',
+                    }}
+                    value={customTradeRoute}
+                    onChange={(e) => setCustomTradeRoute(e.currentTarget.value)}
+                  />
+                </li>
+              )}
+            </ul>
+          </section>
           <button onClick={onSubmit}>Submit</button>
         </div>
         <div style={{ width: '50%', background: 'lightgreen' }}>
@@ -241,36 +299,36 @@ const Home: NextPage = () => {
             {ethValue}
           </section>
           <br />
-          <section style={{ wordBreak: 'break-all' }}>
+          <section>
             <span>args:&nbsp;</span>
-            {JSON.stringify(args)}
+            <pre>{JSON.stringify(args, null, 2)}</pre>
           </section>
           <br />
           {args && (
             <>
-              <section style={{ wordBreak: 'break-all' }}>
+              <section>
                 <span>swapDesc:&nbsp;</span>
-                {JSON.stringify(args[1])}
+                <pre>{JSON.stringify(args[1], null, 2)}</pre>
               </section>
               <br />
-              <section style={{ wordBreak: 'break-all' }}>
+              <section>
                 <span>executorData:&nbsp;</span>
-                {JSON.stringify(args[2])}
+                <pre>{JSON.stringify(args[2], null, 2)}</pre>
               </section>
               <br />
-              <section style={{ wordBreak: 'break-all' }}>
+              <section>
                 <span>rawExecutorData:&nbsp;</span>
-                {JSON.stringify(rawExecutorData)}
+                <pre>{JSON.stringify(rawExecutorData, null, 2)}</pre>
               </section>
               <br />
-              <section style={{ wordBreak: 'break-all' }}>
+              <section>
                 <span>isUseSwapSimpleMode:&nbsp;</span>
                 {isUseSwapSimpleMode ? 'YES' : 'NO'}
               </section>
               <br />
-              <section style={{ wordBreak: 'break-all' }}>
-                <span>tradeSwaps:&nbsp;</span>
-                {JSON.stringify(tradeSwaps)}
+              <section>
+                <span>tradeRoute:&nbsp;</span>
+                <pre>{JSON.stringify(tradeRoute, null, 2)}</pre>
               </section>
             </>
           )}
