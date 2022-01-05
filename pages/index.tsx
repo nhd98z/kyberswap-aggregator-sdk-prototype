@@ -6,6 +6,7 @@ import { getData } from 'kyberswap-aggregator-sdk'
 import { ethers } from 'ethers'
 import BigNumber from 'bignumber.js'
 import autosize from 'autosize'
+import copy from 'copy-to-clipboard'
 
 const DEFAULT_CUSTOM_TRADE_ROUTE = `[
   [
@@ -25,10 +26,6 @@ const DEFAULT_CUSTOM_TRADE_ROUTE = `[
 ]`
 
 const Home: NextPage = () => {
-  useEffect(() => {
-    autosize(document.querySelectorAll('textarea'))
-  }, [])
-
   const [network, setNetwork] = useState(ChainId.BSCMAINNET)
 
   const [amountIn, setAmountIn] = useState('0.000001')
@@ -60,7 +57,24 @@ const Home: NextPage = () => {
   const [isUseSwapSimpleMode, setIsUseSwapSimpleMode] = useState<boolean>()
   const [tradeRoute, setTradeRoute] = useState<any[][]>()
 
+  useEffect(() => {
+    autosize(document.querySelectorAll('textarea'))
+    if (args) {
+      const copyButtons = document.querySelectorAll('.copy')
+      copyButtons.forEach((button) =>
+        button.addEventListener('click', () => {
+          button.innerHTML = 'copied'
+          setTimeout(() => {
+            button.innerHTML = 'copy'
+          }, 300)
+        })
+      )
+    }
+    return () => {}
+  }, [args])
+
   const onSubmit = async () => {
+    onClear()
     const data = await getData({
       currencyAmountIn:
         currencyIn === 'ETH'
@@ -99,6 +113,13 @@ const Home: NextPage = () => {
     if (data.rawExecutorData) setRawExecutorData(data.rawExecutorData)
     if (data.isUseSwapSimpleMode) setIsUseSwapSimpleMode(data.isUseSwapSimpleMode)
     if (data.tradeRoute) setTradeRoute(data.tradeRoute)
+  }
+
+  const onClear = () => {
+    setOutputAmount('')
+    setMethodName('')
+    setEthValue('')
+    setArgs(undefined)
   }
 
   return (
@@ -282,6 +303,7 @@ const Home: NextPage = () => {
             </ul>
           </section>
           <button onClick={onSubmit}>Submit</button>
+          <button onClick={onClear}>Clear output</button>
         </div>
         <div style={{ width: '50%', background: 'lightgreen' }}>
           <section>
@@ -301,6 +323,9 @@ const Home: NextPage = () => {
           <br />
           <section>
             <span>args:&nbsp;</span>
+            <button onClick={() => copy(JSON.stringify(args))} className="copy">
+              copy
+            </button>
             <pre>{JSON.stringify(args, null, 2)}</pre>
           </section>
           <br />
@@ -308,16 +333,25 @@ const Home: NextPage = () => {
             <>
               <section>
                 <span>swapDesc:&nbsp;</span>
+                <button onClick={() => copy(JSON.stringify(args[1]))} className="copy">
+                  copy
+                </button>
                 <pre>{JSON.stringify(args[1], null, 2)}</pre>
               </section>
               <br />
               <section>
                 <span>executorData:&nbsp;</span>
+                <button onClick={() => copy(JSON.stringify(args[2]))} className="copy">
+                  copy
+                </button>
                 <pre>{JSON.stringify(args[2], null, 2)}</pre>
               </section>
               <br />
               <section>
                 <span>rawExecutorData:&nbsp;</span>
+                <button onClick={() => copy(JSON.stringify(rawExecutorData))} className="copy">
+                  copy
+                </button>
                 <pre>{JSON.stringify(rawExecutorData, null, 2)}</pre>
               </section>
               <br />
@@ -328,6 +362,9 @@ const Home: NextPage = () => {
               <br />
               <section>
                 <span>tradeRoute:&nbsp;</span>
+                <button onClick={() => copy(JSON.stringify(tradeRoute))} className="copy">
+                  copy
+                </button>
                 <pre>{JSON.stringify(tradeRoute, null, 2)}</pre>
               </section>
             </>
