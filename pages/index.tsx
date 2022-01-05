@@ -80,7 +80,7 @@ const Home: NextPage = () => {
           ? CurrencyAmount.ether(ethers.utils.parseEther(amountIn).toString())
           : new TokenAmount(
               new Token(network, currencyIn, decimalIn),
-              new BigNumber(amountIn).times(10 ** decimalIn).toString()
+              new BigNumber(amountIn).times(10 ** decimalIn).toFixed()
             ),
       currencyOut: currencyOut === 'ETH' ? Currency.ETHER : new Token(network, currencyOut, decimalOut),
       saveGas: saveGas,
