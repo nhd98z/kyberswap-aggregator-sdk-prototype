@@ -58,7 +58,12 @@ const Home: NextPage = () => {
   const [tradeRoute, setTradeRoute] = useState<any[][]>()
 
   useEffect(() => {
-    autosize(document.querySelectorAll('textarea'))
+    if (isUseCustomTradeRoute) {
+      autosize(document.querySelectorAll('textarea'))
+    }
+  }, [isUseCustomTradeRoute])
+
+  useEffect(() => {
     if (args) {
       const copyButtons = document.querySelectorAll('.copy')
       copyButtons.forEach((button) =>
