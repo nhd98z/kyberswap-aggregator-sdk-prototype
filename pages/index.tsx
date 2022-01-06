@@ -42,7 +42,7 @@ const Home: NextPage = () => {
 
   const [isChargeFee, setIsChargeFee] = useState(true)
   const [chargeFeeBy, setChargeFeeBy] = useState<'currency_in' | 'currency_out'>('currency_in')
-  const [feeReceiver, setFeeReceiver] = useState('0x16368dD7e94f177B8C2c028Ef42289113D328121')
+  const [feeReceiver, setFeeReceiver] = useState('0xDa0D8fF1bE1F78c5d349722A5800622EA31CD5dd')
   const [feeAmount, setFeeAmount] = useState('1000') // 1000 bps = 1000 * 0.01% = 10%
   const [isInBps, setIsInBps] = useState(true)
 
@@ -99,7 +99,11 @@ const Home: NextPage = () => {
         ? {
             chargeFeeBy,
             feeReceiver,
-            feeAmount,
+            feeAmount: isInBps
+              ? feeAmount
+              : chargeFeeBy === 'currency_in'
+              ? new BigNumber(feeAmount).times(10 ** decimalIn).toFixed()
+              : new BigNumber(feeAmount).times(10 ** decimalOut).toFixed(),
             isInBps,
           }
         : undefined,
@@ -236,13 +240,13 @@ const Home: NextPage = () => {
                       checked={chargeFeeBy === 'currency_in'}
                       onChange={() => setChargeFeeBy('currency_in')}
                     />{' '}
-                    Token in
+                    Currency in
                     <input
                       type="radio"
                       checked={chargeFeeBy === 'currency_out'}
                       onChange={() => setChargeFeeBy('currency_out')}
                     />{' '}
-                    Token out
+                    Currency out
                   </li>
                   <li>
                     <span style={{ display: 'inline-block', width: '200px' }}>Fee receiver:</span>
@@ -261,14 +265,17 @@ const Home: NextPage = () => {
                       value={feeAmount}
                       onChange={(e) => setFeeAmount(e.currentTarget.value)}
                     />
-                    {/*{isInBps ? 'bps' : chargeFeeBy === 'currency_in' ? 'currency in' : 'currency out'}*/}
-                    bps (1000 bps = 1000 * 0.01% = 10%)
+                    {isInBps
+                      ? 'bps (1000 bps = 1000 * 0.01% = 10%)'
+                      : chargeFeeBy === 'currency_in'
+                      ? feeAmount && `= ${new BigNumber(feeAmount).times(10 ** decimalIn).toFixed()}`
+                      : feeAmount && `= ${new BigNumber(feeAmount).times(10 ** decimalOut).toFixed()}`}
                   </li>
-                  {/*<li>*/}
-                  {/*  <span style={{ display: 'inline-block', width: '200px' }}>Fee amount in bps?</span>*/}
-                  {/*  <input type="radio" checked={isInBps} onChange={() => setIsInBps(true)} /> True*/}
-                  {/*  <input type="radio" checked={!isInBps} onChange={() => setIsInBps(false)} /> False*/}
-                  {/*</li>*/}
+                  <li>
+                    <span style={{ display: 'inline-block', width: '200px' }}>Fee amount in bps?</span>
+                    <input type="radio" checked={isInBps} onChange={() => setIsInBps(true)} /> True
+                    <input type="radio" checked={!isInBps} onChange={() => setIsInBps(false)} /> False
+                  </li>
                 </>
               )}
             </ul>
@@ -317,7 +324,10 @@ const Home: NextPage = () => {
             {outputAmount &&
               isChargeFee &&
               chargeFeeBy === 'currency_out' &&
-              ' (after fee: ' + new BigNumber(outputAmount).times(1 - +feeAmount / 10000) + ')'}
+              ' (after fee: ' +
+                (isInBps
+                  ? new BigNumber(outputAmount).times(1 - +feeAmount / 10000) + ')'
+                  : new BigNumber(outputAmount).minus(feeAmount) + ')')}
           </section>
           <br />
           <section>
