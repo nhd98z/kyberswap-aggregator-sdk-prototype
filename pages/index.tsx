@@ -338,6 +338,9 @@ const Home: NextPage = () => {
           <section>
             <span>ETH value:&nbsp;</span>
             {ethValue}
+            <button onClick={() => copy(ethValue)} className="copy">
+              copy
+            </button>
           </section>
           <br />
           <section>
