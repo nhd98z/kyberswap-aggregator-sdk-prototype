@@ -317,6 +317,7 @@ const Home: NextPage = () => {
           <section>
             <span>Output amount:&nbsp;</span>
             {outputAmount}
+            {outputAmount && isChargeFee && chargeFeeBy === 'currency_in' && ' (after fee: ???)'}
             {outputAmount &&
               isChargeFee &&
               chargeFeeBy === 'currency_out' &&

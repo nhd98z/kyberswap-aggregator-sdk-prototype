@@ -2220,10 +2220,10 @@ json5@^1.0.1:
     array-includes "^3.1.3"
     object.assign "^4.1.2"
 
-kyberswap-aggregator-sdk@^0.1.12:
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/kyberswap-aggregator-sdk/-/kyberswap-aggregator-sdk-0.1.12.tgz#f8ac4272ff61b1a6293fb1875e7560ba8b6339cf"
-  integrity sha512-r2w/EKBkpHRMdthYs5xn1t3d4IS731KMbJWVfxtdRAVy/8xL8+8yThDRZnA+xOZCTYyj62dvL5CnY80/UtSLWw==
+kyberswap-aggregator-sdk@^0.1.16:
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/kyberswap-aggregator-sdk/-/kyberswap-aggregator-sdk-0.1.16.tgz#b6c0d2d12009bc5dcf071c6717d8634f04a298a5"
+  integrity sha512-GoDTtb2V9waoWXf1fG/GBfpvXcaeEDChAVWTzaLVfzUrReQf1gyqpRCz+R2a7TKaeD1tWU6e/ctKxw/HWNiQ+g==
   dependencies:
     "@dynamic-amm/sdk" "^3.0.23"
     "@ethersproject/address" "^5.5.0"
