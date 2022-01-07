@@ -1,9 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { ChainId, Currency, CurrencyAmount, Fraction, Percent, Token, TokenAmount } from '@dynamic-amm/sdk'
-import { getData } from 'kyberswap-aggregator-sdk'
-import { ethers } from 'ethers'
+import { ChainId, Fraction } from '@dynamic-amm/sdk'
+import { ETHER_ADDRESS, getData } from 'kyberswap-aggregator-sdk'
 import BigNumber from 'bignumber.js'
 import autosize from 'autosize'
 import copy from 'copy-to-clipboard'
@@ -29,21 +28,21 @@ const Home: NextPage = () => {
   const [network, setNetwork] = useState(ChainId.BSCMAINNET)
 
   const [amountIn, setAmountIn] = useState('0.000001')
-  const [currencyIn, setCurrencyIn] = useState('ETH')
+  const [currencyIn, setCurrencyIn] = useState(ETHER_ADDRESS)
   const [decimalIn, setDecimalIn] = useState(18)
 
   const [currencyOut, setCurrencyOut] = useState('0xfe56d5892BDffC7BF58f2E84BE1b2C32D21C308b')
   const [decimalOut, setDecimalOut] = useState(18)
 
   const [saveGas, setSaveGas] = useState(false)
-  const [allowedSlippage, setAllowedSlippage] = useState(5)
+  const [allowedSlippage, setAllowedSlippage] = useState(0.5)
   const [recipient, setRecipient] = useState('0x16368dD7e94f177B8C2c028Ef42289113D328121')
   const [deadline, setDeadline] = useState(20) // minutes
 
   const [isChargeFee, setIsChargeFee] = useState(true)
   const [chargeFeeBy, setChargeFeeBy] = useState<'currency_in' | 'currency_out'>('currency_in')
   const [feeReceiver, setFeeReceiver] = useState('0xDa0D8fF1bE1F78c5d349722A5800622EA31CD5dd')
-  const [feeAmount, setFeeAmount] = useState('1000') // 1000 bps = 1000 * 0.01% = 10%
+  const [feeAmount, setFeeAmount] = useState('8') // 8 bps = 8 * 0.01% = 0.8%
   const [isInBps, setIsInBps] = useState(true)
 
   const [isUseCustomTradeRoute, setIsUseCustomTradeRoute] = useState(true)
@@ -51,7 +50,7 @@ const Home: NextPage = () => {
 
   const [outputAmount, setOutputAmount] = useState<string>()
   const [methodName, setMethodName] = useState<string>()
-  const [ethValue, setEthValue] = useState<string>()
+  const [ethValue, setEthValue] = useState<string>('0x0')
   const [args, setArgs] = useState<Array<string | Array<string | string[]>> | undefined>()
   const [rawExecutorData, setRawExecutorData] = useState<unknown>()
   const [isUseSwapSimpleMode, setIsUseSwapSimpleMode] = useState<boolean>()
@@ -80,20 +79,17 @@ const Home: NextPage = () => {
   const onSubmit = async () => {
     onClear()
     const data = await getData({
-      currencyAmountIn:
-        currencyIn === 'ETH'
-          ? CurrencyAmount.ether(ethers.utils.parseEther(amountIn).toString())
-          : new TokenAmount(
-              new Token(network, currencyIn, decimalIn),
-              new BigNumber(amountIn).times(10 ** decimalIn).toFixed()
-            ),
-      currencyOut: currencyOut === 'ETH' ? Currency.ETHER : new Token(network, currencyOut, decimalOut),
-      saveGas: saveGas,
       chainId: network,
-      options: {
-        allowedSlippage: new Percent((allowedSlippage * 100).toString(), '10000'),
+      currencyInAddress: currencyIn,
+      currencyInDecimal: decimalIn,
+      amountIn: new BigNumber(amountIn).times(10 ** decimalIn).toFixed(),
+      currencyOutAddress: currencyOut,
+      currencyOutDecimal: decimalOut,
+      tradeConfig: {
+        allowedSlippage: allowedSlippage * 100,
         recipient: recipient,
         deadline: Date.now() + deadline * 60 * 1000,
+        saveGas: saveGas,
       },
       feeConfig: isChargeFee
         ? {
@@ -158,7 +154,7 @@ const Home: NextPage = () => {
           <section>
             <div>Amount in:</div>
             <input type="number" value={amountIn} onChange={(e) => setAmountIn(e.currentTarget.value)} />
-            <div>Currency in (ETH = native token):</div>
+            <div>Currency in ({ETHER_ADDRESS} = native token):</div>
             <input
               type="text"
               style={{ width: '333px' }}
@@ -171,7 +167,7 @@ const Home: NextPage = () => {
           <br />
 
           <section>
-            <div>Currency out (ETH = native token):</div>
+            <div>Currency out ({ETHER_ADDRESS} = native token):</div>
             <input
               type="text"
               style={{ width: '333px' }}
@@ -266,7 +262,7 @@ const Home: NextPage = () => {
                       onChange={(e) => setFeeAmount(e.currentTarget.value)}
                     />
                     {isInBps
-                      ? 'bps (1000 bps = 1000 * 0.01% = 10%)'
+                      ? 'bps (8 bps = 8 * 0.01% = 0.08%)'
                       : chargeFeeBy === 'currency_in'
                       ? feeAmount && `= ${new BigNumber(feeAmount).times(10 ** decimalIn).toFixed()}`
                       : feeAmount && `= ${new BigNumber(feeAmount).times(10 ** decimalOut).toFixed()}`}
