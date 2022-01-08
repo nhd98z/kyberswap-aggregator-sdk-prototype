@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { ChainId, Fraction } from '@dynamic-amm/sdk'
+import { ChainId } from '@dynamic-amm/sdk'
 import { ETHER_ADDRESS, getData } from 'kyberswap-aggregator-sdk'
 import BigNumber from 'bignumber.js'
 import autosize from 'autosize'
@@ -34,7 +34,6 @@ const Home: NextPage = () => {
   const [currencyOut, setCurrencyOut] = useState('0xfe56d5892BDffC7BF58f2E84BE1b2C32D21C308b')
   const [decimalOut, setDecimalOut] = useState(18)
 
-  const [saveGas, setSaveGas] = useState(false)
   const [allowedSlippage, setAllowedSlippage] = useState(0.5)
   const [recipient, setRecipient] = useState('0x16368dD7e94f177B8C2c028Ef42289113D328121')
   const [deadline, setDeadline] = useState(20) // minutes
@@ -48,7 +47,6 @@ const Home: NextPage = () => {
   const [isUseCustomTradeRoute, setIsUseCustomTradeRoute] = useState(true)
   const [customTradeRoute, setCustomTradeRoute] = useState(DEFAULT_CUSTOM_TRADE_ROUTE)
 
-  const [outputAmount, setOutputAmount] = useState<string>()
   const [methodName, setMethodName] = useState<string>()
   const [ethValue, setEthValue] = useState<string>('0x0')
   const [args, setArgs] = useState<Array<string | Array<string | string[]>> | undefined>()
@@ -94,10 +92,9 @@ const Home: NextPage = () => {
       currencyOutAddress: currencyOut,
       currencyOutDecimal: decimalOut,
       tradeConfig: {
-        allowedSlippage: allowedSlippage * 100,
-        recipient: recipient,
+        minAmountOut: '1', // TODO
+        recipient,
         deadline: Date.now() + deadline * 60 * 1000,
-        saveGas: saveGas,
       },
       feeConfig: isChargeFee
         ? {
@@ -113,10 +110,6 @@ const Home: NextPage = () => {
         : undefined,
       customTradeRoute: isUseCustomTradeRoute ? customTradeRoute : undefined,
     })
-    if (data.outputAmount) {
-      const fraction = new Fraction(data.outputAmount, (10 ** decimalOut).toString())
-      setOutputAmount(fraction.toSignificant(18))
-    }
     if (data.swapV2Parameters) {
       setMethodName(data.swapV2Parameters.methodNames.join(','))
       setEthValue(data.swapV2Parameters.value)
@@ -128,7 +121,6 @@ const Home: NextPage = () => {
   }
 
   const onClear = () => {
-    setOutputAmount('')
     setMethodName('')
     setEthValue('')
     setArgs(undefined)
@@ -190,11 +182,6 @@ const Home: NextPage = () => {
           <section>
             <div>Trade options:</div>
             <ul>
-              <li>
-                <span style={{ display: 'inline-block', width: '200px' }}>Save gas:</span>
-                <input type="radio" checked={saveGas} onChange={() => setSaveGas(true)} /> True
-                <input type="radio" checked={!saveGas} onChange={() => setSaveGas(false)} /> False
-              </li>
               <li>
                 <span style={{ display: 'inline-block', width: '200px' }}>Allowed slippage:</span>
                 <input
@@ -322,19 +309,6 @@ const Home: NextPage = () => {
           <button onClick={onClear}>Clear output</button>
         </div>
         <div style={{ width: '50%', background: 'lightgreen' }}>
-          <section>
-            <span>Output amount:&nbsp;</span>
-            {outputAmount}
-            {outputAmount && isChargeFee && chargeFeeBy === 'currency_in' && ' (after fee: ???)'}
-            {outputAmount &&
-              isChargeFee &&
-              chargeFeeBy === 'currency_out' &&
-              ' (after fee: ' +
-                (isInBps
-                  ? new BigNumber(outputAmount).times(1 - +feeAmount / 10000) + ')'
-                  : new BigNumber(outputAmount).minus(feeAmount) + ')')}
-          </section>
-          <br />
           <section>
             <span>Method name:&nbsp;</span>
             {methodName}
