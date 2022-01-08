@@ -87,10 +87,10 @@ const Home: NextPage = () => {
     const data = await getData({
       chainId: network,
       currencyInAddress: currencyIn,
-      currencyInDecimal: decimalIn,
+      currencyInDecimals: decimalIn,
       amountIn: amountInAfterFeeInBn.toFixed(),
       currencyOutAddress: currencyOut,
-      currencyOutDecimal: decimalOut,
+      currencyOutDecimals: decimalOut,
       tradeConfig: {
         minAmountOut,
         recipient,
