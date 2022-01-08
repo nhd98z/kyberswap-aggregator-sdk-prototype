@@ -34,7 +34,7 @@ const Home: NextPage = () => {
   const [currencyOut, setCurrencyOut] = useState('0xfe56d5892BDffC7BF58f2E84BE1b2C32D21C308b')
   const [decimalOut, setDecimalOut] = useState(18)
 
-  const [allowedSlippage, setAllowedSlippage] = useState(0.5)
+  const [minAmountOut, setMinAmountOut] = useState(new BigNumber(1).div(10 ** 18).toFixed())
   const [recipient, setRecipient] = useState('0x16368dD7e94f177B8C2c028Ef42289113D328121')
   const [deadline, setDeadline] = useState(20) // minutes
 
@@ -92,7 +92,7 @@ const Home: NextPage = () => {
       currencyOutAddress: currencyOut,
       currencyOutDecimal: decimalOut,
       tradeConfig: {
-        minAmountOut: '1', // TODO
+        minAmountOut,
         recipient,
         deadline: Date.now() + deadline * 60 * 1000,
       },
@@ -183,14 +183,17 @@ const Home: NextPage = () => {
             <div>Trade options:</div>
             <ul>
               <li>
-                <span style={{ display: 'inline-block', width: '200px' }}>Allowed slippage:</span>
+                <span style={{ display: 'inline-block', width: '200px' }}>Min amount out:</span>
                 <input
-                  type="number"
-                  style={{ margin: '0 4px', width: '40px' }}
-                  value={allowedSlippage}
-                  onChange={(e) => setAllowedSlippage(+e.currentTarget.value)}
+                  type="text"
+                  style={{ margin: '0 4px' }}
+                  value={minAmountOut}
+                  onChange={(e) => setMinAmountOut(e.currentTarget.value)}
                 />
-                %
+                {minAmountOut &&
+                  `= ${new BigNumber(minAmountOut)
+                    .times(10 ** decimalOut)
+                    .toFixed()} (this number must be a positive integer)`}
               </li>
               <li>
                 <span style={{ display: 'inline-block', width: '200px' }}>Recipient:</span>
