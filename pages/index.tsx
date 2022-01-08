@@ -78,11 +78,19 @@ const Home: NextPage = () => {
 
   const onSubmit = async () => {
     onClear()
+    const amountInBn = new BigNumber(amountIn).times(10 ** decimalIn)
+    const feeInBn =
+      isChargeFee && chargeFeeBy === 'currency_in'
+        ? isInBps
+          ? new BigNumber(amountInBn).times(feeAmount).div(10000)
+          : new BigNumber(feeAmount).times(10 ** decimalIn)
+        : new BigNumber('0')
+    const amountInAfterFeeInBn = amountInBn.minus(feeInBn)
     const data = await getData({
       chainId: network,
       currencyInAddress: currencyIn,
       currencyInDecimal: decimalIn,
-      amountIn: new BigNumber(amountIn).times(10 ** decimalIn).toFixed(),
+      amountIn: amountInAfterFeeInBn.toFixed(),
       currencyOutAddress: currencyOut,
       currencyOutDecimal: decimalOut,
       tradeConfig: {
@@ -357,19 +365,8 @@ const Home: NextPage = () => {
           {args && (
             <>
               <section>
-                <span>swapDesc:&nbsp;</span>
-                <button onClick={() => copy(JSON.stringify(args[1]))} className="copy">
-                  copy
-                </button>
-                <pre>{JSON.stringify(args[1], null, 2)}</pre>
-              </section>
-              <br />
-              <section>
-                <span>executorData:&nbsp;</span>
-                <button onClick={() => copy(JSON.stringify(args[2]))} className="copy">
-                  copy
-                </button>
-                <pre>{JSON.stringify(args[2], null, 2)}</pre>
+                <span>isUseSwapSimpleMode:&nbsp;</span>
+                {isUseSwapSimpleMode ? 'YES' : 'NO'}
               </section>
               <br />
               <section>
@@ -378,11 +375,6 @@ const Home: NextPage = () => {
                   copy
                 </button>
                 <pre>{JSON.stringify(rawExecutorData, null, 2)}</pre>
-              </section>
-              <br />
-              <section>
-                <span>isUseSwapSimpleMode:&nbsp;</span>
-                {isUseSwapSimpleMode ? 'YES' : 'NO'}
               </section>
               <br />
               <section>
