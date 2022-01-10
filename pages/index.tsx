@@ -34,7 +34,7 @@ const Home: NextPage = () => {
   const [currencyOut, setCurrencyOut] = useState('0xfe56d5892BDffC7BF58f2E84BE1b2C32D21C308b')
   const [decimalOut, setDecimalOut] = useState(18)
 
-  const [minAmountOut, setMinAmountOut] = useState(new BigNumber(1).div(10 ** 18).toFixed())
+  const [minAmountOut, setMinAmountOut] = useState('1')
   const [recipient, setRecipient] = useState('0x16368dD7e94f177B8C2c028Ef42289113D328121')
   const [deadline, setDeadline] = useState(20) // minutes
 
@@ -76,8 +76,8 @@ const Home: NextPage = () => {
 
   const onSubmit = async () => {
     onClear()
-    if (new BigNumber(minAmountOut).times(10 ** decimalOut).lt(1)) {
-      alert('Min amount out after multiplied by [[10 ^ decimal]] must be a positive integer.')
+    if (new BigNumber(minAmountOut).lt(1) || !new BigNumber(minAmountOut).isInteger()) {
+      alert('Min amount out must be a positive integer.')
       return
     }
     const amountInBn = new BigNumber(amountIn).times(10 ** decimalIn)
@@ -96,7 +96,7 @@ const Home: NextPage = () => {
       currencyOutAddress: currencyOut,
       currencyOutDecimals: decimalOut,
       tradeConfig: {
-        minAmountOut: new BigNumber(minAmountOut).times(10 ** decimalOut).toFixed(),
+        minAmountOut,
         recipient,
         deadline: Date.now() + deadline * 60 * 1000,
       },
@@ -194,8 +194,6 @@ const Home: NextPage = () => {
                   value={minAmountOut}
                   onChange={(e) => setMinAmountOut(e.currentTarget.value)}
                 />
-                {minAmountOut &&
-                  `* 10^${decimalOut} = ${new BigNumber(minAmountOut).times(10 ** decimalOut).toFixed()}`}
               </li>
               <li>
                 <span style={{ display: 'inline-block', width: '200px' }}>Recipient:</span>
