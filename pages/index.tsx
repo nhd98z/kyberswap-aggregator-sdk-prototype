@@ -140,7 +140,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>KyberSwap Aggregator SDK</h1>
+      <h1>KyberSwap Aggregator SDK v0.1.0</h1>
       <div style={{ display: 'flex', background: 'whitesmoke' }}>
         <div style={{ width: '50%', background: 'lightcyan' }}>
           <section>
