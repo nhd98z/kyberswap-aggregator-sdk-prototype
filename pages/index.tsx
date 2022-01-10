@@ -60,6 +60,8 @@ const Home: NextPage = () => {
     }
   }, [isUseCustomTradeRoute])
 
+  console.log(`x`, new BigNumber(minAmountOut).toString(16))
+
   useEffect(() => {
     if (args) {
       const copyButtons = document.querySelectorAll('.copy')
@@ -187,16 +189,16 @@ const Home: NextPage = () => {
             <div>Trade options:</div>
             <ul>
               <li>
-                <span style={{ display: 'inline-block', width: '200px' }}>Min amount out:</span>
+                <span style={{ display: 'inline-block', width: '250px' }}>Min amount out (after * 10^decimals):</span>
                 <input
                   type="text"
-                  style={{ margin: '0 4px' }}
+                  style={{ margin: '0 4px', width: '333px' }}
                   value={minAmountOut}
                   onChange={(e) => setMinAmountOut(e.currentTarget.value)}
                 />
               </li>
               <li>
-                <span style={{ display: 'inline-block', width: '200px' }}>Recipient:</span>
+                <span style={{ display: 'inline-block', width: '250px' }}>Recipient:</span>
                 <input
                   type="text"
                   style={{ marginLeft: '4px', width: '333px' }}
@@ -205,7 +207,7 @@ const Home: NextPage = () => {
                 />
               </li>
               <li>
-                <span style={{ display: 'inline-block', width: '200px' }}>Deadline:</span>
+                <span style={{ display: 'inline-block', width: '250px' }}>Deadline:</span>
                 <input
                   type="number"
                   style={{ margin: '0 4px', width: '30px' }}
@@ -221,14 +223,14 @@ const Home: NextPage = () => {
             <div>Fee config:</div>
             <ul>
               <li>
-                <span style={{ display: 'inline-block', width: '200px' }}>Charge fee?</span>
+                <span style={{ display: 'inline-block', width: '250px' }}>Charge fee?</span>
                 <input type="radio" checked={isChargeFee} onChange={() => setIsChargeFee(true)} /> True
                 <input type="radio" checked={!isChargeFee} onChange={() => setIsChargeFee(false)} /> False
               </li>
               {isChargeFee && (
                 <>
                   <li>
-                    <span style={{ display: 'inline-block', width: '200px' }}>Charge fee by:</span>
+                    <span style={{ display: 'inline-block', width: '250px' }}>Charge fee by:</span>
                     <input
                       type="radio"
                       checked={chargeFeeBy === 'currency_in'}
@@ -243,7 +245,7 @@ const Home: NextPage = () => {
                     Currency out
                   </li>
                   <li>
-                    <span style={{ display: 'inline-block', width: '200px' }}>Fee receiver:</span>
+                    <span style={{ display: 'inline-block', width: '250px' }}>Fee receiver:</span>
                     <input
                       type="text"
                       style={{ marginLeft: '4px', width: '333px' }}
@@ -252,7 +254,7 @@ const Home: NextPage = () => {
                     />
                   </li>
                   <li>
-                    <span style={{ display: 'inline-block', width: '200px' }}>Fee amount:</span>
+                    <span style={{ display: 'inline-block', width: '250px' }}>Fee amount:</span>
                     <input
                       type="text"
                       style={{ margin: '0 4px' }}
@@ -266,7 +268,7 @@ const Home: NextPage = () => {
                       : feeAmount && `= ${new BigNumber(feeAmount).times(10 ** decimalOut).toFixed()}`}
                   </li>
                   <li>
-                    <span style={{ display: 'inline-block', width: '200px' }}>Fee amount in bps?</span>
+                    <span style={{ display: 'inline-block', width: '250px' }}>Fee amount in bps?</span>
                     <input type="radio" checked={isInBps} onChange={() => setIsInBps(true)} /> True
                     <input type="radio" checked={!isInBps} onChange={() => setIsInBps(false)} /> False
                   </li>
@@ -279,7 +281,7 @@ const Home: NextPage = () => {
             <div>Trade route:</div>
             <ul>
               <li>
-                <span style={{ display: 'inline-block', width: '200px' }}>Use custom trade route?</span>
+                <span style={{ display: 'inline-block', width: '250px' }}>Use custom trade route?</span>
                 <input
                   type="radio"
                   checked={isUseCustomTradeRoute}
@@ -295,7 +297,7 @@ const Home: NextPage = () => {
               </li>
               {isUseCustomTradeRoute && (
                 <li>
-                  <div style={{ width: '200px' }}>Custom trade route:</div>
+                  <div style={{ width: '250px' }}>Custom trade route:</div>
                   <textarea
                     style={{
                       width: 'calc(100% - 32px)',
