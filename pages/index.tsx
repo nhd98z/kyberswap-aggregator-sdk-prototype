@@ -191,9 +191,7 @@ const Home: NextPage = () => {
                   onChange={(e) => setMinAmountOut(e.currentTarget.value)}
                 />
                 {minAmountOut &&
-                  `= ${new BigNumber(minAmountOut)
-                    .times(10 ** decimalOut)
-                    .toFixed()} (this number must be a positive integer)`}
+                  `* 10^${decimalOut} = ${new BigNumber(minAmountOut).times(10 ** decimalOut).toFixed()}`}
               </li>
               <li>
                 <span style={{ display: 'inline-block', width: '200px' }}>Recipient:</span>
