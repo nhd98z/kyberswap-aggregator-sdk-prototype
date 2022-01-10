@@ -92,7 +92,7 @@ const Home: NextPage = () => {
       currencyOutAddress: currencyOut,
       currencyOutDecimals: decimalOut,
       tradeConfig: {
-        minAmountOut,
+        minAmountOut: new BigNumber(minAmountOut).times(10 ** decimalOut).toFixed(),
         recipient,
         deadline: Date.now() + deadline * 60 * 1000,
       },
