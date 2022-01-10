@@ -44,7 +44,7 @@ const Home: NextPage = () => {
   const [feeAmount, setFeeAmount] = useState('8') // 8 bps = 8 * 0.01% = 0.8%
   const [isInBps, setIsInBps] = useState(true)
 
-  const [isUseCustomTradeRoute, setIsUseCustomTradeRoute] = useState(true)
+  const [isUseCustomTradeRoute, setIsUseCustomTradeRoute] = useState(false)
   const [customTradeRoute, setCustomTradeRoute] = useState(DEFAULT_CUSTOM_TRADE_ROUTE)
 
   const [methodName, setMethodName] = useState<string>()
@@ -76,6 +76,10 @@ const Home: NextPage = () => {
 
   const onSubmit = async () => {
     onClear()
+    if (new BigNumber(minAmountOut).times(10 ** decimalOut).lt(1)) {
+      alert('Min amount out after multiplied by [[10 ^ decimal]] must be a positive integer.')
+      return
+    }
     const amountInBn = new BigNumber(amountIn).times(10 ** decimalIn)
     const feeInBn =
       isChargeFee && chargeFeeBy === 'currency_in'
