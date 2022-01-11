@@ -81,7 +81,7 @@ const Home: NextPage = () => {
     }
 
     void updateMinAmountOut()
-  }, [isInBps, feeAmount, chargeFeeBy, isChargeFee, slippage])
+  }, [isInBps, feeAmount, chargeFeeBy, isChargeFee, slippage, amountIn, currencyIn, currencyOut])
 
   useEffect(() => {
     if (isUseCustomTradeRoute) {
@@ -167,7 +167,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>KyberSwap Aggregator SDK v0.1.1</h1>
+      <h1>KyberSwap Aggregator SDK v0.1.2</h1>
       <div style={{ display: 'flex', background: 'whitesmoke' }}>
         <div style={{ width: '50%', background: 'lightcyan' }}>
           <section>
