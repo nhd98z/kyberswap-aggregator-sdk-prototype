@@ -8,10 +8,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@kyberswap/aggregator-sdk": "^0.1.0",
     "autosize": "^5.0.1",
     "bignumber.js": "^9.0.2",
     "copy-to-clipboard": "^3.3.1",
-    "kyberswap-aggregator-sdk": "^0.1.23",
     "next": "12.0.7",
     "react": "17.0.2",
     "react-dom": "17.0.2"

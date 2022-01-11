@@ -471,6 +471,19 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
+"@kyberswap/aggregator-sdk@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@kyberswap/aggregator-sdk/-/aggregator-sdk-0.1.0.tgz#ebcedd919ec045b48259656adea0e1b9f553bb0d"
+  integrity sha512-SDGqwJwc8bsXC5uoXFIGH+jqpXz2FhlUVauoJtgYBhTWhX0PNOFz9t+INhL/PaCpZLdGMsf2Z/YHnD/g9ebXwg==
+  dependencies:
+    "@dynamic-amm/sdk" "^3.0.23"
+    "@ethersproject/address" "^5.5.0"
+    "@ethersproject/constants" "^5.5.0"
+    "@ethersproject/providers" "^5.5.1"
+    axios "^0.24.0"
+    bignumber.js "^9.0.2"
+    ethers "^5.5.2"
+
 "@napi-rs/triples@1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@napi-rs/triples/-/triples-1.0.3.tgz#76d6d0c3f4d16013c61e45dfca5ff1e6c31ae53c"
@@ -2219,19 +2232,6 @@ json5@^1.0.1:
   dependencies:
     array-includes "^3.1.3"
     object.assign "^4.1.2"
-
-kyberswap-aggregator-sdk@^0.1.23:
-  version "0.1.23"
-  resolved "https://registry.yarnpkg.com/kyberswap-aggregator-sdk/-/kyberswap-aggregator-sdk-0.1.23.tgz#cc969d9f429e32f2215db85d14f92fe43b018499"
-  integrity sha512-1QhqCT+C59jECZBS/sZwRyzn9FBfQaLywzQgCvHw5QrTgA7gE1xuGbMZk8t/sRE16lw8Gn0z1NfrKJtczezz0g==
-  dependencies:
-    "@dynamic-amm/sdk" "^3.0.23"
-    "@ethersproject/address" "^5.5.0"
-    "@ethersproject/constants" "^5.5.0"
-    "@ethersproject/providers" "^5.5.1"
-    axios "^0.24.0"
-    bignumber.js "^9.0.2"
-    ethers "^5.5.2"
 
 language-subtag-registry@~0.3.2:
   version "0.3.21"

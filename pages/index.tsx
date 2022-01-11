@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { ChainId } from '@dynamic-amm/sdk'
-import { ETHER_ADDRESS, getData } from 'kyberswap-aggregator-sdk'
+import { ETHER_ADDRESS, getData } from '@kyberswap/aggregator-sdk'
 import BigNumber from 'bignumber.js'
 import autosize from 'autosize'
 import copy from 'copy-to-clipboard'
@@ -163,7 +163,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>KyberSwap Aggregator SDK v0.1.3</h1>
+      <h1>KyberSwap Aggregator SDK v0.1.4</h1>
       <div style={{ display: 'flex', background: 'whitesmoke' }}>
         <div style={{ width: '50%', background: 'lightcyan' }}>
           <section>
