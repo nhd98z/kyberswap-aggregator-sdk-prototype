@@ -34,6 +34,7 @@ const Home: NextPage = () => {
   const [currencyOut, setCurrencyOut] = useState('0xfe56d5892BDffC7BF58f2E84BE1b2C32D21C308b')
   const [decimalOut, setDecimalOut] = useState(18)
 
+  const [slippage, setSlippage] = useState('0.5')
   const [minAmountOut, setMinAmountOut] = useState('1')
   const [recipient, setRecipient] = useState('0x16368dD7e94f177B8C2c028Ef42289113D328121')
   const [deadline, setDeadline] = useState(20) // minutes
@@ -55,12 +56,38 @@ const Home: NextPage = () => {
   const [tradeRoute, setTradeRoute] = useState<any[][]>()
 
   useEffect(() => {
+    const updateMinAmountOut = async () => {
+      const WBNB = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+      const amountInBn = new BigNumber(amountIn).times(10 ** decimalIn)
+      const feeInBn =
+        isChargeFee && chargeFeeBy === 'currency_in'
+          ? isInBps
+            ? new BigNumber(amountInBn).times(feeAmount).div(10000)
+            : new BigNumber(feeAmount).times(10 ** decimalIn)
+          : new BigNumber('0')
+      const amountInAfterFeeInBn = amountInBn.minus(feeInBn)
+      const response = await fetch(
+        `https://aggregator-api.kyber.org/bsc/route?tokenIn=${
+          currencyIn === ETHER_ADDRESS ? WBNB : currencyIn
+        }&tokenOut=${currencyOut === ETHER_ADDRESS ? WBNB : currencyOut}&amountIn=${amountInAfterFeeInBn.toFixed()}`
+      )
+      const outputAmount = (await response.json()).outputAmount
+      let newMinAmountOut = new BigNumber(outputAmount)
+      if (isChargeFee && chargeFeeBy === 'currency_out') {
+        newMinAmountOut = isInBps ? newMinAmountOut.times(1 - +feeAmount / 10000) : newMinAmountOut.minus(feeAmount)
+      }
+      newMinAmountOut = newMinAmountOut.div(1 + +slippage / 100)
+      setMinAmountOut(newMinAmountOut.integerValue(BigNumber.ROUND_HALF_UP).toFixed())
+    }
+
+    void updateMinAmountOut()
+  }, [isInBps, feeAmount, chargeFeeBy, isChargeFee, slippage])
+
+  useEffect(() => {
     if (isUseCustomTradeRoute) {
       autosize(document.querySelectorAll('textarea'))
     }
   }, [isUseCustomTradeRoute])
-
-  console.log(`x`, new BigNumber(minAmountOut).toString(16))
 
   useEffect(() => {
     if (args) {
@@ -140,7 +167,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>KyberSwap Aggregator SDK v0.1.0</h1>
+      <h1>KyberSwap Aggregator SDK v0.1.1</h1>
       <div style={{ display: 'flex', background: 'whitesmoke' }}>
         <div style={{ width: '50%', background: 'lightcyan' }}>
           <section>
@@ -189,7 +216,17 @@ const Home: NextPage = () => {
             <div>Trade options:</div>
             <ul>
               <li>
-                <span style={{ display: 'inline-block', width: '250px' }}>Min amount out (after * 10^decimals):</span>
+                <span style={{ display: 'inline-block', width: '200px' }}>Slippage:</span>
+                <input
+                  type="number"
+                  style={{ margin: '0 4px', width: '40px' }}
+                  value={slippage}
+                  onChange={(e) => setSlippage(e.currentTarget.value)}
+                />
+                %
+              </li>
+              <li>
+                <span style={{ display: 'inline-block', width: '200px' }}>Min amount out:</span>
                 <input
                   type="text"
                   style={{ margin: '0 4px', width: '333px' }}
@@ -198,7 +235,7 @@ const Home: NextPage = () => {
                 />
               </li>
               <li>
-                <span style={{ display: 'inline-block', width: '250px' }}>Recipient:</span>
+                <span style={{ display: 'inline-block', width: '200px' }}>Recipient:</span>
                 <input
                   type="text"
                   style={{ marginLeft: '4px', width: '333px' }}
@@ -207,7 +244,7 @@ const Home: NextPage = () => {
                 />
               </li>
               <li>
-                <span style={{ display: 'inline-block', width: '250px' }}>Deadline:</span>
+                <span style={{ display: 'inline-block', width: '200px' }}>Deadline:</span>
                 <input
                   type="number"
                   style={{ margin: '0 4px', width: '30px' }}
@@ -223,14 +260,14 @@ const Home: NextPage = () => {
             <div>Fee config:</div>
             <ul>
               <li>
-                <span style={{ display: 'inline-block', width: '250px' }}>Charge fee?</span>
+                <span style={{ display: 'inline-block', width: '200px' }}>Charge fee?</span>
                 <input type="radio" checked={isChargeFee} onChange={() => setIsChargeFee(true)} /> True
                 <input type="radio" checked={!isChargeFee} onChange={() => setIsChargeFee(false)} /> False
               </li>
               {isChargeFee && (
                 <>
                   <li>
-                    <span style={{ display: 'inline-block', width: '250px' }}>Charge fee by:</span>
+                    <span style={{ display: 'inline-block', width: '200px' }}>Charge fee by:</span>
                     <input
                       type="radio"
                       checked={chargeFeeBy === 'currency_in'}
@@ -245,7 +282,7 @@ const Home: NextPage = () => {
                     Currency out
                   </li>
                   <li>
-                    <span style={{ display: 'inline-block', width: '250px' }}>Fee receiver:</span>
+                    <span style={{ display: 'inline-block', width: '200px' }}>Fee receiver:</span>
                     <input
                       type="text"
                       style={{ marginLeft: '4px', width: '333px' }}
@@ -254,7 +291,7 @@ const Home: NextPage = () => {
                     />
                   </li>
                   <li>
-                    <span style={{ display: 'inline-block', width: '250px' }}>Fee amount:</span>
+                    <span style={{ display: 'inline-block', width: '200px' }}>Fee amount:</span>
                     <input
                       type="text"
                       style={{ margin: '0 4px' }}
@@ -268,7 +305,7 @@ const Home: NextPage = () => {
                       : feeAmount && `= ${new BigNumber(feeAmount).times(10 ** decimalOut).toFixed()}`}
                   </li>
                   <li>
-                    <span style={{ display: 'inline-block', width: '250px' }}>Fee amount in bps?</span>
+                    <span style={{ display: 'inline-block', width: '200px' }}>Fee amount in bps?</span>
                     <input type="radio" checked={isInBps} onChange={() => setIsInBps(true)} /> True
                     <input type="radio" checked={!isInBps} onChange={() => setIsInBps(false)} /> False
                   </li>
@@ -281,7 +318,7 @@ const Home: NextPage = () => {
             <div>Trade route:</div>
             <ul>
               <li>
-                <span style={{ display: 'inline-block', width: '250px' }}>Use custom trade route?</span>
+                <span style={{ display: 'inline-block', width: '200px' }}>Use custom trade route?</span>
                 <input
                   type="radio"
                   checked={isUseCustomTradeRoute}
@@ -297,7 +334,7 @@ const Home: NextPage = () => {
               </li>
               {isUseCustomTradeRoute && (
                 <li>
-                  <div style={{ width: '250px' }}>Custom trade route:</div>
+                  <div style={{ width: '200px' }}>Custom trade route:</div>
                   <textarea
                     style={{
                       width: 'calc(100% - 32px)',
