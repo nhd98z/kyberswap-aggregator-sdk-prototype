@@ -56,34 +56,6 @@ const Home: NextPage = () => {
   const [tradeRoute, setTradeRoute] = useState<any[][]>()
 
   useEffect(() => {
-    const updateMinAmountOut = async () => {
-      const WBNB = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
-      const amountInBn = new BigNumber(amountIn).times(10 ** decimalIn)
-      const feeInBn =
-        isChargeFee && chargeFeeBy === 'currency_in'
-          ? isInBps
-            ? new BigNumber(amountInBn).times(feeAmount).div(10000)
-            : new BigNumber(feeAmount).times(10 ** decimalIn)
-          : new BigNumber('0')
-      const amountInAfterFeeInBn = amountInBn.minus(feeInBn)
-      const response = await fetch(
-        `https://aggregator-api.kyber.org/bsc/route?tokenIn=${
-          currencyIn === ETHER_ADDRESS ? WBNB : currencyIn
-        }&tokenOut=${currencyOut === ETHER_ADDRESS ? WBNB : currencyOut}&amountIn=${amountInAfterFeeInBn.toFixed()}`
-      )
-      const outputAmount = (await response.json()).outputAmount
-      let newMinAmountOut = new BigNumber(outputAmount)
-      if (isChargeFee && chargeFeeBy === 'currency_out') {
-        newMinAmountOut = isInBps ? newMinAmountOut.times(1 - +feeAmount / 10000) : newMinAmountOut.minus(feeAmount)
-      }
-      newMinAmountOut = newMinAmountOut.div(1 + +slippage / 100)
-      setMinAmountOut(newMinAmountOut.integerValue(BigNumber.ROUND_HALF_UP).toFixed())
-    }
-
-    void updateMinAmountOut()
-  }, [isInBps, feeAmount, chargeFeeBy, isChargeFee, slippage, amountIn, currencyIn, currencyOut])
-
-  useEffect(() => {
     if (isUseCustomTradeRoute) {
       autosize(document.querySelectorAll('textarea'))
     }
@@ -102,6 +74,30 @@ const Home: NextPage = () => {
       )
     }
   }, [args])
+
+  const updateMinAmountOut = async () => {
+    const WBNB = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+    const amountInBn = new BigNumber(amountIn).times(10 ** decimalIn)
+    const feeInBn =
+      isChargeFee && chargeFeeBy === 'currency_in'
+        ? isInBps
+          ? new BigNumber(amountInBn).times(feeAmount ?? '0.5').div(10000)
+          : new BigNumber(feeAmount).times(10 ** decimalIn)
+        : new BigNumber('0')
+    const amountInAfterFeeInBn = amountInBn.minus(feeInBn)
+    const response = await fetch(
+      `https://aggregator-api.kyber.org/bsc/route?tokenIn=${
+        currencyIn === ETHER_ADDRESS ? WBNB : currencyIn
+      }&tokenOut=${currencyOut === ETHER_ADDRESS ? WBNB : currencyOut}&amountIn=${amountInAfterFeeInBn.toFixed()}`
+    )
+    const outputAmount = (await response.json()).outputAmount
+    let newMinAmountOut = new BigNumber(outputAmount)
+    if (isChargeFee && chargeFeeBy === 'currency_out') {
+      newMinAmountOut = isInBps ? newMinAmountOut.times(1 - +feeAmount / 10000) : newMinAmountOut.minus(feeAmount)
+    }
+    newMinAmountOut = newMinAmountOut.div(1 + +slippage / 100)
+    setMinAmountOut(newMinAmountOut.integerValue(BigNumber.ROUND_HALF_UP).toFixed())
+  }
 
   const onSubmit = async () => {
     onClear()
@@ -167,7 +163,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>KyberSwap Aggregator SDK v0.1.2</h1>
+      <h1>KyberSwap Aggregator SDK v0.1.3</h1>
       <div style={{ display: 'flex', background: 'whitesmoke' }}>
         <div style={{ width: '50%', background: 'lightcyan' }}>
           <section>
@@ -229,10 +225,11 @@ const Home: NextPage = () => {
                 <span style={{ display: 'inline-block', width: '200px' }}>Min amount out:</span>
                 <input
                   type="text"
-                  style={{ margin: '0 4px', width: '333px' }}
+                  style={{ marginLeft: '4px', width: '333px' }}
                   value={minAmountOut}
                   onChange={(e) => setMinAmountOut(e.currentTarget.value)}
                 />
+                <button onClick={updateMinAmountOut}>Update</button>
               </li>
               <li>
                 <span style={{ display: 'inline-block', width: '200px' }}>Recipient:</span>
