@@ -85,10 +85,27 @@ const Home: NextPage = () => {
           : new BigNumber(feeAmount).times(10 ** decimalIn)
         : new BigNumber('0')
     const amountInAfterFeeInBn = amountInBn.minus(feeInBn)
+    const fetchArgs = {
+      path:
+        network === ChainId.MAINNET
+          ? 'ethereum'
+          : network === ChainId.MATIC
+          ? 'polygon'
+          : network === ChainId.BSCMAINNET
+          ? 'bsc'
+          : network === ChainId.AVAXMAINNET
+          ? 'avalanche'
+          : network === ChainId.FANTOM
+          ? 'fantom'
+          : network === ChainId.CRONOS
+          ? 'cronos'
+          : null,
+      tokenIn: currencyIn === ETHER_ADDRESS ? WBNB : currencyIn,
+      tokenOut: currencyOut === ETHER_ADDRESS ? WBNB : currencyOut,
+      amountIn: amountInAfterFeeInBn.toFixed(),
+    }
     const response = await fetch(
-      `https://aggregator-api.kyber.org/bsc/route?tokenIn=${
-        currencyIn === ETHER_ADDRESS ? WBNB : currencyIn
-      }&tokenOut=${currencyOut === ETHER_ADDRESS ? WBNB : currencyOut}&amountIn=${amountInAfterFeeInBn.toFixed()}`
+      `https://aggregator-api.kyber.org/${fetchArgs.path}/route?tokenIn=${fetchArgs.tokenIn}&tokenOut=${fetchArgs.tokenOut}&amountIn=${fetchArgs.amountIn}`
     )
     const outputAmount = (await response.json()).outputAmount
     let newMinAmountOut = new BigNumber(outputAmount)
@@ -163,7 +180,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>KyberSwap Aggregator SDK v0.1.4</h1>
+      <h1>KyberSwap Aggregator SDK v0.1.5</h1>
       <div style={{ display: 'flex', background: 'whitesmoke' }}>
         <div style={{ width: '50%', background: 'lightcyan' }}>
           <section>
@@ -173,9 +190,12 @@ const Home: NextPage = () => {
               value={network}
               onChange={(e) => setNetwork(+e.currentTarget.value as any)}
             >
-              {/*<option value={ChainId.MAINNET}>Ethereum</option>*/}
+              <option value={ChainId.MAINNET}>Ethereum</option>
+              <option value={ChainId.MATIC}>Polygon</option>
               <option value={ChainId.BSCMAINNET}>Binance Smart Chain</option>
-              {/*<option value={ChainId.MATIC}>Polygon</option>*/}
+              <option value={ChainId.AVAXMAINNET}>Avalanche</option>
+              <option value={ChainId.FANTOM}>Fantom</option>
+              <option value={ChainId.CRONOS}>Cronos</option>
             </select>
           </section>
           <br />
