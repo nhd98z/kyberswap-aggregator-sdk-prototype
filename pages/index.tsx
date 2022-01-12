@@ -76,7 +76,20 @@ const Home: NextPage = () => {
   }, [args])
 
   const updateMinAmountOut = async () => {
+    const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+    const WMATIC = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
     const WBNB = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+    const WAVAX = '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7'
+    const WFTM = '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83'
+    const WCRO = '0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23'
+    const WRAPPED_NATIVE_TOKEN: { [p: string]: string } = {
+      [ChainId.MAINNET]: WETH,
+      [ChainId.MATIC]: WMATIC,
+      [ChainId.BSCMAINNET]: WBNB,
+      [ChainId.AVAXMAINNET]: WAVAX,
+      [ChainId.FANTOM]: WFTM,
+      [ChainId.CRONOS]: WCRO,
+    }
     const amountInBn = new BigNumber(amountIn).times(10 ** decimalIn)
     const feeInBn =
       isChargeFee && chargeFeeBy === 'currency_in'
@@ -100,8 +113,8 @@ const Home: NextPage = () => {
           : network === ChainId.CRONOS
           ? 'cronos'
           : null,
-      tokenIn: currencyIn === ETHER_ADDRESS ? WBNB : currencyIn,
-      tokenOut: currencyOut === ETHER_ADDRESS ? WBNB : currencyOut,
+      tokenIn: currencyIn === ETHER_ADDRESS ? WRAPPED_NATIVE_TOKEN[network] : currencyIn,
+      tokenOut: currencyOut === ETHER_ADDRESS ? WRAPPED_NATIVE_TOKEN[network] : currencyOut,
       amountIn: amountInAfterFeeInBn.toFixed(),
     }
     const response = await fetch(
@@ -180,7 +193,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>KyberSwap Aggregator SDK v0.1.5</h1>
+      <h1>KyberSwap Aggregator SDK v0.1.6</h1>
       <div style={{ display: 'flex', background: 'whitesmoke' }}>
         <div style={{ width: '50%', background: 'lightcyan' }}>
           <section>
