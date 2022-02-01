@@ -3,9 +3,13 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { ChainId } from '@dynamic-amm/sdk'
 import { ETHER_ADDRESS, getData } from '@kyberswap/aggregator-sdk'
+import DMM_ABI from '@kyberswap/aggregator-sdk/dist/abis/dmm-router-v2.json'
 import BigNumber from 'bignumber.js'
 import autosize from 'autosize'
 import copy from 'copy-to-clipboard'
+import { Contract } from '@ethersproject/contracts'
+import useConnectWalletCallback from 'hooks/useConnectWalletCallback'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 
 const DEFAULT_CUSTOM_TRADE_ROUTE = `[
   [
@@ -39,7 +43,7 @@ const Home: NextPage = () => {
   const [recipient, setRecipient] = useState('0x16368dD7e94f177B8C2c028Ef42289113D328121')
   const [deadline, setDeadline] = useState(20) // minutes
 
-  const [isChargeFee, setIsChargeFee] = useState(true)
+  const [isChargeFee, setIsChargeFee] = useState(false)
   const [chargeFeeBy, setChargeFeeBy] = useState<'currency_in' | 'currency_out'>('currency_in')
   const [feeReceiver, setFeeReceiver] = useState('0xDa0D8fF1bE1F78c5d349722A5800622EA31CD5dd')
   const [feeAmount, setFeeAmount] = useState('8') // 8 bps = 8 * 0.01% = 0.8%
@@ -185,6 +189,22 @@ const Home: NextPage = () => {
     setArgs(undefined)
   }
 
+  const onConnect = useConnectWalletCallback()
+
+  const { account, library } = useActiveWeb3React()
+
+  const onSwap = async () => {
+    const contract = new Contract(
+      '0xdf1a1b60f2d438842916c0adc43748768353ec25',
+      DMM_ABI,
+      account && library ? library.getSigner(account) : library
+    )
+    const signer = library?.getSigner()
+    if (account && args && signer) {
+      await contract['swap'](...args, ethValue === '0' ? { from: account } : { value: ethValue, from: account })
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -193,9 +213,13 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>KyberSwap Aggregator SDK v0.1.7</h1>
+      <h1>KyberSwap Aggregator SDK v0.1.8</h1>
       <div style={{ display: 'flex', background: 'whitesmoke' }}>
         <div style={{ width: '50%', background: 'lightcyan' }}>
+          <section>
+            <div>Account: {account ? account : <button onClick={onConnect}>connect</button>}</div>
+          </section>
+          <br />
           <section>
             <div>Network:</div>
             <select
@@ -383,7 +407,7 @@ const Home: NextPage = () => {
         <div style={{ width: '50%', background: 'lightgreen' }}>
           <section>
             <span>Method name:&nbsp;</span>
-            {methodName}
+            {methodName && <button onClick={onSwap}>swap (support BSC only)</button>}
           </section>
           <br />
           <section>
