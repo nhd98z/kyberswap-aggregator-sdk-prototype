@@ -122,7 +122,7 @@ const Home: NextPage = () => {
       amountIn: amountInAfterFeeInBn.toFixed(),
     }
     const response = await fetch(
-      `https://aggregator-api.kyber.org/${fetchArgs.path}/route?tokenIn=${fetchArgs.tokenIn}&tokenOut=${fetchArgs.tokenOut}&amountIn=${fetchArgs.amountIn}`
+      `https://aggregator-api.kyberswap.com/${fetchArgs.path}/route?tokenIn=${fetchArgs.tokenIn}&tokenOut=${fetchArgs.tokenOut}&amountIn=${fetchArgs.amountIn}`
     )
     const outputAmount = (await response.json()).outputAmount
     let newMinAmountOut = new BigNumber(outputAmount)
