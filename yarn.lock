@@ -471,10 +471,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@kyberswap/aggregator-sdk@^0.1.10":
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/@kyberswap/aggregator-sdk/-/aggregator-sdk-0.1.10.tgz#43a1f2842c350204b8cc18040b0d8d6aad6169e4"
-  integrity sha512-lC32AApxwjWgFfkkpcTKkH2Zpi5zSsetlLqwKcA10HozRJlwwF0bgroHPoCJqxuxKflNt1lvugmNtdeREj/jBg==
+"@kyberswap/aggregator-sdk@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@kyberswap/aggregator-sdk/-/aggregator-sdk-0.1.11.tgz#0590847bd765c36c8303532cb9847746033c69a2"
+  integrity sha512-rkgrR9WTXOT3TrmdWRWwP3qxXer4l0nrUoimi20eWS6G24Z/OR6Sk5r0e3AQRTPRnKR3V6K8Syp0/rZdS4C96Q==
   dependencies:
     "@dynamic-amm/sdk" "^3.0.23"
     "@ethersproject/address" "^5.5.0"
