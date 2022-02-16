@@ -8,7 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@kyberswap/aggregator-sdk": "^0.1.11",
+    "@kyberswap/aggregator-sdk": "^0.1.14",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
     "autosize": "^5.0.1",
