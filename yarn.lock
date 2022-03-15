@@ -65,10 +65,10 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
-"@dynamic-amm/sdk@^3.0.27":
-  version "3.0.27"
-  resolved "https://registry.yarnpkg.com/@dynamic-amm/sdk/-/sdk-3.0.27.tgz#1aa84173e1ddb686a3c2ebddc6b8679154fd2638"
-  integrity sha512-zX9xIBoK2qrjgIsa8zDpY6C7B2OhP4033nsR+1EMbnjlM/sqbHRQl/p/meEwndTFmjDDmAOxuz60Sq1qa1Cpag==
+"@dynamic-amm/sdk@^3.0.33":
+  version "3.0.33"
+  resolved "https://registry.yarnpkg.com/@dynamic-amm/sdk/-/sdk-3.0.33.tgz#a26904bb0253e76da4cecd9fffe5f88358f3b945"
+  integrity sha512-6IFvlA8qQO8NQGdwyZHBtBwyBuh1N9RkK/s5dPGnkDSfr7HmccELU9xCGMzW7jW7T9Sw54Du0bVpkgh5qpQLpw==
   dependencies:
     "@ethersproject/address" "^5.0.2"
     "@ethersproject/contracts" "^5.0.2"
@@ -471,12 +471,12 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@kyberswap/aggregator-sdk@^0.1.14":
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/@kyberswap/aggregator-sdk/-/aggregator-sdk-0.1.14.tgz#7c234db08fca7423e372c1a46d9462f76a9c3d54"
-  integrity sha512-QgX4hvYyU9Yhw2RK0KMopq4qGrRL+Uvg5ViLYZzGeBdTr/+ROfgv/7v8nVERoJEGCQ38EhXP9/D1cQ6QiYBogw==
+"@kyberswap/aggregator-sdk@^0.1.16":
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/@kyberswap/aggregator-sdk/-/aggregator-sdk-0.1.16.tgz#440bc57ded352aa2b9e043f1405e1d75d8ed2a91"
+  integrity sha512-H80orpAyeRDHE1O3k9ROaUCAI2cRl3R0gJSNvLLiA0N4Hcgv0Hm4yi5GumvtF/dY2an9+bfSf9xQH48JLGU0/g==
   dependencies:
-    "@dynamic-amm/sdk" "^3.0.27"
+    "@dynamic-amm/sdk" "^3.0.33"
     "@ethersproject/address" "^5.5.0"
     "@ethersproject/constants" "^5.5.0"
     "@ethersproject/providers" "^5.5.1"
